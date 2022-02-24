@@ -2,9 +2,97 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row" style="font-size:11px;">
+
+    <div style="width: 46%;  margin-bottom:20px; ">
+
+        <form method="post">
+            <table style="width: 100%; " id="FormTable">
+                <tr>
+                    <td><lable>Servers:</lable></td>
+                    <td><input type="text" asp-for="Config.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
+                </tr>
+                <tr>
+                    <td><lable>Group Id: </lable></td>
+                    <td><input type="text" asp-for="Config.ClientId" placeholder="Group Id" /></td>
+                </tr>
+                <tr>
+                    <td><lable>Topic: </lable></td>
+                    <td><input type="text" asp-for="Config.Topic" placeholder="Topic" /></td>
+                </tr>
+                <tr>
+                    <td><lable>AutoCommit</lable></td>
+                    <td><input type="checkbox" asp-for="Config.EnableAutoCommit" /></td>
+                </tr>
+                <tr>
+                    <td><lable>AutoOffsetStore</lable></td>
+                    <td><input type="checkbox" asp-for="Config.EnableAutoOffsetStore" /></td>
+                </tr>
+                <tr>
+                    <td><lable style="margin:10px 0px 0px 0px;">AutoOffsetReset</lable></td>
+                    <td><input type="number" asp-for="Config.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top:30px;">
+            <h6>Publish</h6></br>
+            <form method="post" style="">
+                <label>Payload:</label>
+                <textarea type="text" asp-for="Message" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
+                <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Publish">Enviar</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div style="width: 4%;">
+    </div>
+    <div style="width: 4%; border-left:solid 1px; border-left-color:darkgray;">
+    </div>
+
+    <div style="width: 46%;">
+
+        <form method="post">
+            <table style="width: 100%; " id="FormTable">
+                <tr>
+                    <td><lable>Servers:</lable></td>
+                    <td><input type="text" asp-for="Config.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
+                </tr>
+                <tr>
+                    <td><lable>Group Id: </lable></td>
+                    <td><input type="text" asp-for="Config.ClientId" placeholder="Group Id" /></td>
+                </tr>
+                <tr>
+                    <td><lable>Topic: </lable></td>
+                    <td><input type="text" asp-for="Config.Topic" placeholder="Topic" /></td>
+                </tr>
+                <tr>
+                    <td><lable>AutoCommit</lable></td>
+                    <td><input type="checkbox" asp-for="Config.EnableAutoCommit" /></td>
+                </tr>
+                <tr>
+                    <td><lable>AutoOffsetStore</lable></td>
+                    <td><input type="checkbox" asp-for="Config.EnableAutoOffsetStore" /></td>
+                </tr>
+                <tr>
+                    <td><lable style="margin:10px 0px 0px 0px;">AutoOffsetReset</lable></td>
+                    <td><input type="number" asp-for="Config.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
+                </tr>
+            </table>
+        </form>
+
+        <div style="margin-top:30px;">
+            <h6>Publish</h6></br>
+            <form method="post" style="">
+                <label>Payload:</label>
+                <textarea type="text" asp-for="Message" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
+                <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Publish">Enviar</button>
+            </form>
+        </div>
+
+    </div>
 </div>
