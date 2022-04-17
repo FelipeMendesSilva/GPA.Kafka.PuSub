@@ -21,9 +21,9 @@ namespace GPA.Kafka.PuSub.Pages
         }
 
         [BindProperty]
-        public ConfigurationModel Config { get; set; }
+        public PublishConfigModel PublishConfig { get; set; }
         [BindProperty]
-        public string Message { get; set; }
+        public ConsumerConfigModel ConsumerConfig { get; set; }
 
         public void OnGet()
         {
@@ -35,33 +35,55 @@ namespace GPA.Kafka.PuSub.Pages
 
         }
 
-        public void OnPostPublishAsync(CancellationToken stoppingToken)
+        public IActionResult OnPostPublishAsync(CancellationToken stoppingToken)
         {
             var config = new ProducerConfig
             {
-                BootstrapServers = Config.BootstrapServers,
-                ClientId = Config.ClientId
+                BootstrapServers = PublishConfig.BootstrapServers,
+                ClientId = PublishConfig.ClientId
             };
 
 
             using (var producer = new ProducerBuilder<Null, string>(config).Build())
             {
-                var t = producer.ProduceAsync("topic", new Message<Null, string> { Value = Message }, stoppingToken);
+                IActionResult result = new OkResult();
+                var t = producer.ProduceAsync("topic", new Message<Null, string> { Value = PublishConfig.Payload }, stoppingToken);
                 t.ContinueWith(task =>
                 {
+
                     if (task.IsFaulted)
                     {
+                        result = BadRequest();
                         //msg nao enviada
-                    }
-                    else
-                    {
-                        //mensagem enviada
                     }
                 });
                 producer.Flush(TimeSpan.FromSeconds(5));
                 producer.Dispose();
+                return result;
             }
 
+        }
+
+        public IActionResult OnPostConsumeAsync(CancellationToken stoppingToken)
+        {
+            var config = new ConsumerConfig
+            {
+                BootstrapServers = ConsumerConfig.BootstrapServers,
+                GroupId = ConsumerConfig.ClientId,
+                EnableAutoCommit = ConsumerConfig.EnableAutoCommit,
+                EnableAutoOffsetStore = ConsumerConfig.EnableAutoOffsetStore
+            };
+
+
+            using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
+            {
+                consumer.Subscribe(ConsumerConfig.Topic);               
+                var consumeResult = consumer.Consume(stoppingToken);
+                consumer.Close();
+                ConsumerConfig.Message = "Oi";
+                return new OkObjectResult(consumeResult);
+                
+            }
         }
     }
 }

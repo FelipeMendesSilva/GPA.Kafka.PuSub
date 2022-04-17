@@ -13,28 +13,12 @@
             <table style="width: 100%; " id="FormTable">
                 <tr>
                     <td><lable>Servers:</lable></td>
-                    <td><input type="text" asp-for="Config.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
+                    <td><input type="text" asp-for="PublishConfig.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
                 </tr>
                 <tr>
                     <td><lable>Group Id: </lable></td>
-                    <td><input type="text" asp-for="Config.ClientId" placeholder="Group Id" /></td>
-                </tr>
-                <tr>
-                    <td><lable>Topic: </lable></td>
-                    <td><input type="text" asp-for="Config.Topic" placeholder="Topic" /></td>
-                </tr>
-                <tr>
-                    <td><lable>AutoCommit</lable></td>
-                    <td><input type="checkbox" asp-for="Config.EnableAutoCommit" /></td>
-                </tr>
-                <tr>
-                    <td><lable>AutoOffsetStore</lable></td>
-                    <td><input type="checkbox" asp-for="Config.EnableAutoOffsetStore" /></td>
-                </tr>
-                <tr>
-                    <td><lable style="margin:10px 0px 0px 0px;">AutoOffsetReset</lable></td>
-                    <td><input type="number" asp-for="Config.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
-                </tr>
+                    <td><input type="text" asp-for="PublishConfig.ClientId" placeholder="Group Id" /></td>
+                </tr>               
             </table>
         </form>
 
@@ -42,7 +26,7 @@
             <h6>Publish</h6></br>
             <form method="post" style="">
                 <label>Payload:</label>
-                <textarea type="text" asp-for="Message" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
+                <textarea type="text" asp-for="PublishConfig.Payload" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
                 <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Publish">Enviar</button>
             </form>
         </div>
@@ -60,37 +44,37 @@
             <table style="width: 100%; " id="FormTable">
                 <tr>
                     <td><lable>Servers:</lable></td>
-                    <td><input type="text" asp-for="Config.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
+                    <td><input type="text" asp-for="ConsumerConfig.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
                 </tr>
                 <tr>
                     <td><lable>Group Id: </lable></td>
-                    <td><input type="text" asp-for="Config.ClientId" placeholder="Group Id" /></td>
+                    <td><input type="text" asp-for="ConsumerConfig.ClientId" placeholder="Group Id" /></td>
                 </tr>
                 <tr>
                     <td><lable>Topic: </lable></td>
-                    <td><input type="text" asp-for="Config.Topic" placeholder="Topic" /></td>
+                    <td><input type="text" asp-for="ConsumerConfig.Topic" placeholder="Topic" /></td>
                 </tr>
                 <tr>
                     <td><lable>AutoCommit</lable></td>
-                    <td><input type="checkbox" asp-for="Config.EnableAutoCommit" /></td>
+                    <td><input type="checkbox" asp-for="ConsumerConfig.EnableAutoCommit" /></td>
                 </tr>
                 <tr>
                     <td><lable>AutoOffsetStore</lable></td>
-                    <td><input type="checkbox" asp-for="Config.EnableAutoOffsetStore" /></td>
+                    <td><input type="checkbox" asp-for="ConsumerConfig.EnableAutoOffsetStore" /></td>
                 </tr>
                 <tr>
                     <td><lable style="margin:10px 0px 0px 0px;">AutoOffsetReset</lable></td>
-                    <td><input type="number" asp-for="Config.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
+                    <td><input type="number" asp-for="ConsumerConfig.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
                 </tr>
             </table>
         </form>
 
         <div style="margin-top:30px;">
-            <h6>Publish</h6></br>
+            <h6>Consume</h6></br>
             <form method="post" style="">
                 <label>Payload:</label>
-                <textarea type="text" asp-for="Message" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
-                <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Publish">Enviar</button>
+                <textarea type="text" asp-for="ConsumerConfig.Message" style="width:100%; min-height:200px;" placeholder="{ }"></textarea>
+                <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Consume">Enviar</button>
             </form>
         </div>
 
