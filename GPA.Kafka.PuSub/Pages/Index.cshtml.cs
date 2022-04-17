@@ -23,7 +23,7 @@ namespace GPA.Kafka.PuSub.Pages
         [BindProperty]
         public PublishConfigModel PublishConfig { get; set; }
         [BindProperty]
-        public ConsumerConfigModel ConsumerConfig { get; set; }
+        public ConsumerConfigModel ConsumeConfig { get; set; }
 
         public void OnGet()
         {
@@ -64,26 +64,30 @@ namespace GPA.Kafka.PuSub.Pages
 
         }
 
-        public IActionResult OnPostConsumeAsync(CancellationToken stoppingToken)
+        public void OnPostConsumeAsync(CancellationToken stoppingToken)
         {
+            if (String.IsNullOrEmpty(ConsumeConfig.BootstrapServers)) { ViewData["Messages"] = "Error: BootstrapServes invalid parameter"; return; }
+            if (String.IsNullOrEmpty(ConsumeConfig.GroupId)) { ViewData["Messages"] = "Error: GroupId invalid parameter"; return; }
+            if (String.IsNullOrEmpty(ConsumeConfig.Topic)) { ViewData["Messages"] = "Error: Topic invalid parameter"; return; }
+
             var config = new ConsumerConfig
             {
-                BootstrapServers = ConsumerConfig.BootstrapServers,
-                GroupId = ConsumerConfig.ClientId,
-                EnableAutoCommit = ConsumerConfig.EnableAutoCommit,
-                EnableAutoOffsetStore = ConsumerConfig.EnableAutoOffsetStore
+                BootstrapServers = ConsumeConfig.BootstrapServers,
+                GroupId = ConsumeConfig.GroupId,
+                EnableAutoCommit = ConsumeConfig.EnableAutoCommit,
+                EnableAutoOffsetStore = ConsumeConfig.EnableAutoOffsetStore
             };
-
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
             {
-                consumer.Subscribe(ConsumerConfig.Topic);               
-                var consumeResult = consumer.Consume(stoppingToken);
+                consumer.Subscribe(ConsumeConfig.Topic);
+                var consumeResult = "hi";//consumer.Consume(stoppingToken);
                 consumer.Close();
-                ConsumerConfig.Message = "Oi";
-                return new OkObjectResult(consumeResult);
-                
+                ViewData["Messages"] = consumeResult;
+                //ConsumeConfig.Message = "Oi";               
             }
+
+
         }
     }
 }
