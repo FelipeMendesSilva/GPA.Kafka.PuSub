@@ -14,17 +14,17 @@ namespace GPA.Kafka.PuSub.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
+
         }
 
         [BindProperty]
         public PublishConfigModel PublishConfig { get; set; }
         [BindProperty]
         public ConsumerConfigModel ConsumeConfig { get; set; }
-
+        
         public void OnGet()
         {
 
@@ -35,40 +35,54 @@ namespace GPA.Kafka.PuSub.Pages
 
         }
 
-        public IActionResult OnPostPublishAsync(CancellationToken stoppingToken)
+        public void OnPostPublishAsync(CancellationToken stoppingToken)
         {
+            ViewData["Publish Result"] = "";
+            ViewData["Fail Result"] = "";
+            ViewData["Success Result"] = "";
+            if (String.IsNullOrEmpty(PublishConfig.BootstrapServers)) { ViewData["Publish Result"] = "Error: BootstrapServes invalid parameter"; return; }
+            if (String.IsNullOrEmpty(PublishConfig.ClientId)) { ViewData["Publish Result"] = "Error: GroupId invalid parameter"; return; }
+
             var config = new ProducerConfig
             {
                 BootstrapServers = PublishConfig.BootstrapServers,
                 ClientId = PublishConfig.ClientId
             };
 
-
+            var result = true;
             using (var producer = new ProducerBuilder<Null, string>(config).Build())
             {
-                IActionResult result = new OkResult();
                 var t = producer.ProduceAsync("topic", new Message<Null, string> { Value = PublishConfig.Payload }, stoppingToken);
                 t.ContinueWith(task =>
                 {
-
-                    if (task.IsFaulted)
-                    {
-                        result = BadRequest();
-                        //msg nao enviada
-                    }
+                    if (!task.IsFaulted) {result = true;}
+                    else {result = false;}
                 });
+                if (result)
+                {
+                    ViewData["Publish Result"] = "";
+                    ViewData["Fail Result"] = "";
+                    ViewData["Success Result"] = "Success";
+                    //msg enviada
+                }
+                else
+                {
+                    ViewData["Publish Result"] = "";
+                    ViewData["Success Result"] = "";
+                    ViewData["Fail Result"] = "Fail";
+                }
                 producer.Flush(TimeSpan.FromSeconds(5));
                 producer.Dispose();
-                return result;
+                
             }
-
         }
 
         public void OnPostConsumeAsync(CancellationToken stoppingToken)
         {
-            if (String.IsNullOrEmpty(ConsumeConfig.BootstrapServers)) { ViewData["Messages"] = "Error: BootstrapServes invalid parameter"; return; }
-            if (String.IsNullOrEmpty(ConsumeConfig.GroupId)) { ViewData["Messages"] = "Error: GroupId invalid parameter"; return; }
-            if (String.IsNullOrEmpty(ConsumeConfig.Topic)) { ViewData["Messages"] = "Error: Topic invalid parameter"; return; }
+            ViewData["Consume Result"] = "";
+            if (String.IsNullOrEmpty(ConsumeConfig.BootstrapServers)) { ViewData["Consume Result"] = "Error: BootstrapServes invalid parameter"; return; }
+            if (String.IsNullOrEmpty(ConsumeConfig.GroupId)) { ViewData["Consume Result"] = "Error: GroupId invalid parameter"; return; }
+            if (String.IsNullOrEmpty(ConsumeConfig.Topic)) { ViewData["Consume Result"] = "Error: Topic invalid parameter"; return; }
 
             var config = new ConsumerConfig
             {
@@ -80,14 +94,16 @@ namespace GPA.Kafka.PuSub.Pages
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
             {
+                var messages = "";
                 consumer.Subscribe(ConsumeConfig.Topic);
-                var consumeResult = "hi";//consumer.Consume(stoppingToken);
+                for (int i = 0; i < ConsumeConfig.Loop; i++)
+                {
+                    messages += "hi\n"; // consumer.Consume(stoppingToken);
+                    ViewData["Messages"] = messages;
+                }                
                 consumer.Close();
-                ViewData["Messages"] = consumeResult;
-                //ConsumeConfig.Message = "Oi";               
+                
             }
-
-
         }
     }
 }

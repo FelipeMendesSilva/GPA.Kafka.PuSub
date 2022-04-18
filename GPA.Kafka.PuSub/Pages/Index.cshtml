@@ -10,7 +10,7 @@
     <div style="width: 46%;  margin-bottom:20px; ">
 
         <form method="post">
-            <table style="width: 100%; " id="FormTable">
+            <table style="width: 100%; ">
                 <tr>
                     <td><lable>Servers:</lable></td>
                     <td><input type="text" asp-for="PublishConfig.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
@@ -18,19 +18,20 @@
                 <tr>
                     <td><lable>Group Id: </lable></td>
                     <td><input type="text" asp-for="PublishConfig.ClientId" placeholder="Client Id" /></td>
-                </tr>               
+                </tr>
             </table>
-        </form>
 
-        <div style="margin-top:30px;">
-            <h6>Publish</h6></br>
-            <form method="post" style="">
+            <div style="margin-top:30px;">
+                <h6>Publish</h6></br>
+
                 <label>Payload:</label>
                 <textarea type="text" asp-for="PublishConfig.Payload" style="width:100%; min-height:296px;" placeholder="{ }"></textarea>
                 <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Publish">Publish</button>
-            </form>
-        </div>
+                <b style="margin-left:20px; color:yellowgreen">@ViewData["Success Result"]</b>
+                <b style="margin-left:20px;color:red">@ViewData["Fail Result"]@ViewData["Publish Result"]</b>
 
+            </div>
+        </form>
     </div>
 
     <div style="width: 4%;">
@@ -38,7 +39,7 @@
     <div style="width: 4%; border-left:solid 1px; border-left-color:darkgray;">
     </div>
 
-    <div style="width: 46%;">
+    <div style="width: 46%; margin-bottom: 20px;">
 
         <form method="post">
             <table style="width: 100%; " id="FormTable2">
@@ -70,11 +71,13 @@
 
             <div style="margin-top:30px;">
                 <h6>Consume</h6></br>
-                <form method="post" style="">
-                    <label>Message:</label>
-                    <textarea type="text" style="width:100%; min-height:227px;">@ViewData["Messages"]</textarea>
-                    <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Consume">Consume</button>
-                </form>
+
+                <label>Message:</label>
+                <textarea type="text" style="width:100%; min-height:227px;">@ViewData["Messages"]</textarea>
+                <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Consume">Consume</button>
+                <input type="number" asp-for="ConsumeConfig.Loop" placeholder="1" style="width:60px;" />
+                <b style="margin-left:20px;color:red">@ViewData["Consume Result"]</b>
+
             </div>
         </form>
 
