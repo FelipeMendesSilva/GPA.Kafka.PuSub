@@ -46,16 +46,16 @@ namespace GPA.Kafka.PuSub.Pages
             var config = new ProducerConfig
             {
                 BootstrapServers = PublishConfig.BootstrapServers,
-                ClientId = PublishConfig.ClientId
+                ClientId = PublishConfig.ClientId                
             };
 
             var result = true;
             using (var producer = new ProducerBuilder<Null, string>(config).Build())
             {
-                var t = producer.ProduceAsync("topic", new Message<Null, string> { Value = PublishConfig.Payload }, stoppingToken);
+                var t = producer.ProduceAsync(PublishConfig.Topic, new Message<Null, string> { Value = PublishConfig.Payload }, stoppingToken);
                 t.ContinueWith(task =>
                 {
-                    if (!task.IsFaulted) { result = true; }
+                    if (task.Exception == null) { result = true; }
                     else { result = false; }
                 });
                 if (result)
@@ -96,12 +96,13 @@ namespace GPA.Kafka.PuSub.Pages
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
             {
-
+                var viewResult = "";
                 consumer.Subscribe(ConsumeConfig.Topic);
                 for (int i = 0; i < ConsumeConfig.Loop; i++)
                 {
                     var consumeResult = consumer.Consume(stoppingToken).Message;
-                    ViewData["Messages"] = consumeResult.Value;
+                    viewResult += (string)consumeResult.Value + Environment.NewLine + Environment.NewLine;
+                    ViewData["Messages"] = viewResult;
                 }
                 consumer.Close();
 

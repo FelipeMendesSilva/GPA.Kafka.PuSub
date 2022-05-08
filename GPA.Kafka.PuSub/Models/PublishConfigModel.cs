@@ -10,5 +10,6 @@ namespace GPA.Kafka.PuSub.Models
         public string BootstrapServers { get; set; }
         public string ClientId { get; set; }
         public string Payload { get; set; }
+        public string Topic { get; set; }
     }
 }
