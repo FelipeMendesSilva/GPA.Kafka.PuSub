@@ -24,7 +24,7 @@ namespace GPA.Kafka.PuSub.Pages
         public PublishConfigModel PublishConfig { get; set; }
         [BindProperty]
         public ConsumerConfigModel ConsumeConfig { get; set; }
-        
+
         public void OnGet()
         {
 
@@ -55,8 +55,8 @@ namespace GPA.Kafka.PuSub.Pages
                 var t = producer.ProduceAsync("topic", new Message<Null, string> { Value = PublishConfig.Payload }, stoppingToken);
                 t.ContinueWith(task =>
                 {
-                    if (!task.IsFaulted) {result = true;}
-                    else {result = false;}
+                    if (!task.IsFaulted) { result = true; }
+                    else { result = false; }
                 });
                 if (result)
                 {
@@ -73,7 +73,7 @@ namespace GPA.Kafka.PuSub.Pages
                 }
                 producer.Flush(TimeSpan.FromSeconds(5));
                 producer.Dispose();
-                
+
             }
         }
 
@@ -94,15 +94,15 @@ namespace GPA.Kafka.PuSub.Pages
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
             {
-                var messages = "";
+
                 consumer.Subscribe(ConsumeConfig.Topic);
                 for (int i = 0; i < ConsumeConfig.Loop; i++)
                 {
-                    messages += "hi\n"; // consumer.Consume(stoppingToken);
-                    ViewData["Messages"] = messages;
-                }                
+                    var consumeResult = consumer.Consume().Message;
+                    ViewData["Messages"] = consumeResult.Value;
+                }
                 consumer.Close();
-                
+
             }
         }
     }

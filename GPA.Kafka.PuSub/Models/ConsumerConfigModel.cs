@@ -12,7 +12,7 @@ namespace GPA.Kafka.PuSub.Models
         public string GroupId { get; set; }
         public bool EnableAutoCommit { get; set; }
         public bool EnableAutoOffsetStore { get; set; }
-        public string AutoOffsetReset { get; set; } 
-        public int Loop { get; set; }
+        public string AutoOffsetReset { get; set; }
+        public int Loop { get; set; } = 1;
     }
 }
