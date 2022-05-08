@@ -83,13 +83,15 @@ namespace GPA.Kafka.PuSub.Pages
             if (String.IsNullOrEmpty(ConsumeConfig.BootstrapServers)) { ViewData["Consume Result"] = "Error: BootstrapServes invalid parameter"; return; }
             if (String.IsNullOrEmpty(ConsumeConfig.GroupId)) { ViewData["Consume Result"] = "Error: GroupId invalid parameter"; return; }
             if (String.IsNullOrEmpty(ConsumeConfig.Topic)) { ViewData["Consume Result"] = "Error: Topic invalid parameter"; return; }
+            ConsumeConfig.AutoOffsetReset = int.Parse( Request.Form["OffsetType"]);            
 
             var config = new ConsumerConfig
             {
                 BootstrapServers = ConsumeConfig.BootstrapServers,
                 GroupId = ConsumeConfig.GroupId,
                 EnableAutoCommit = ConsumeConfig.EnableAutoCommit,
-                EnableAutoOffsetStore = ConsumeConfig.EnableAutoOffsetStore
+                EnableAutoOffsetStore = ConsumeConfig.EnableAutoOffsetStore,
+                AutoOffsetReset = (AutoOffsetReset)ConsumeConfig.AutoOffsetReset
             };
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
@@ -98,7 +100,7 @@ namespace GPA.Kafka.PuSub.Pages
                 consumer.Subscribe(ConsumeConfig.Topic);
                 for (int i = 0; i < ConsumeConfig.Loop; i++)
                 {
-                    var consumeResult = consumer.Consume().Message;
+                    var consumeResult = consumer.Consume(stoppingToken).Message;
                     ViewData["Messages"] = consumeResult.Value;
                 }
                 consumer.Close();

@@ -65,9 +65,22 @@
                 </tr>
                 <tr>
                     <td><lable style="margin:10px 0px 0px 0px;">AutoOffsetReset</lable></td>
-                    <td><input type="number" asp-for="ConsumeConfig.AutoOffsetReset" placeholder="0" style="width:60px;" /></td>
+                    <td>
+                        <select id="OffsetType" asp-for="ConsumeConfig.AutoOffsetReset" name="OffsetType">
+
+                            <option selected="selected" value="0">Latest</option>
+
+                            <option value="1">Earliest</option>
+
+                            <option value="2">None</option>
+
+                        </select>
+                    </td>
+
+
                 </tr>
             </table>
+           
 
             <div style="margin-top:30px;">
                 <h6>Consume</h6></br>
