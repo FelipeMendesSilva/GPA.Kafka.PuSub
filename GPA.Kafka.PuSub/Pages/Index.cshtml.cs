@@ -91,20 +91,30 @@ namespace GPA.Kafka.PuSub.Pages
                 GroupId = ConsumeConfig.GroupId,
                 EnableAutoCommit = ConsumeConfig.EnableAutoCommit,
                 EnableAutoOffsetStore = ConsumeConfig.EnableAutoOffsetStore,
-                AutoOffsetReset = (AutoOffsetReset)ConsumeConfig.AutoOffsetReset
+                AutoOffsetReset = (AutoOffsetReset)ConsumeConfig.AutoOffsetReset,
+                
             };
 
             using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
             {
-                var viewResult = "";
-                consumer.Subscribe(ConsumeConfig.Topic);
-                for (int i = 0; i < ConsumeConfig.Loop; i++)
+                try
                 {
-                    var consumeResult = consumer.Consume(stoppingToken).Message;
-                    viewResult += (string)consumeResult.Value + Environment.NewLine + Environment.NewLine;
-                    ViewData["Messages"] = viewResult;
+                    var viewResult = "";
+                    consumer.Subscribe(ConsumeConfig.Topic);
+                    for (int i = 0; i < ConsumeConfig.Loop; i++)
+                    {
+                        var consumeResult = consumer.Consume(stoppingToken).Message;
+                        viewResult += (string)consumeResult.Value + Environment.NewLine + Environment.NewLine;
+                        ViewData["Messages"] = viewResult;
+                    }
+                    consumer.Close();
                 }
-                consumer.Close();
+                catch (Exception ex)
+                {
+
+                    ViewData["Consume Result"] = ex.ToString();
+                }
+                
 
             }
         }

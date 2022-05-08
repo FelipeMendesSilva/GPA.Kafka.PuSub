@@ -90,7 +90,7 @@
                 <h6>Consume</h6></br>
 
                 <label>Message:</label>
-                <textarea type="text" style="width:100%; min-height:227px;">@ViewData["Messages"]</textarea>
+                <textarea type="text" style="width:100%; min-height:247px;">@ViewData["Messages"]</textarea>
                 <button type="submit" style="margin:20px 0px 0px 0px;" asp-page-handler="Consume">Consume</button>
                 <input type="number" asp-for="ConsumeConfig.Loop" placeholder="1" style="width:60px;" />
                 <b style="margin-left:20px;color:red">@ViewData["Consume Result"]</b>
