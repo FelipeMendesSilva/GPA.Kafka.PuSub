@@ -16,17 +16,16 @@
                     <td><input type="text" asp-for="PublishConfig.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
                 </tr>
                 <tr>
-                    <td><lable>Group Id: </lable></td>
+                    <td><lable>Group_Id:</lable></td>
                     <td><input type="text" asp-for="PublishConfig.ClientId" placeholder="Client Id" /></td>
                 </tr>
                 <tr>
-                    <td><lable>Topic: </lable></td>
+                    <td><lable>Topic:</lable></td>
                     <td><input type="text" asp-for="PublishConfig.Topic" placeholder="Topic" /></td>
                 </tr>
             </table>
-
-            <div style="margin-top:30px;">
-                <h6>Publish</h6></br>
+            <div style="margin-top:20px;">
+                <h6>Publish</h6>
 
                 <label>Payload:</label>
                 <textarea type="text" asp-for="PublishConfig.Payload" style="width:100%; min-height:296px;" placeholder="{ }"></textarea>
@@ -52,7 +51,7 @@
                     <td><input type="text" asp-for="ConsumeConfig.BootstrapServers" placeholder="Server1:port,Server2:port" /></td>
                 </tr>
                 <tr>
-                    <td><lable>Group Id: </lable></td>
+                    <td><lable>Group_Id: </lable></td>
                     <td><input type="text" asp-for="ConsumeConfig.GroupId" placeholder="Group Id" /></td>
                 </tr>
                 <tr>
@@ -80,14 +79,10 @@
 
                         </select>
                     </td>
-
-
                 </tr>
-            </table>
-           
-
-            <div style="margin-top:30px;">
-                <h6>Consume</h6></br>
+            </table>        
+            <div style="margin-top:20px;">
+                <h6>Consume</h6>
 
                 <label>Message:</label>
                 <textarea type="text" style="width:100%; min-height:247px;">@ViewData["Messages"]</textarea>
